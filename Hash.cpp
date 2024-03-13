@@ -1,24 +1,31 @@
 #include <iostream>
 #include <string>
+#include <openssl/sha.h>
 
-unsigned int hashFunction(const std::string& input) {
-    const unsigned int prime = 31; // Un nombre premier pour le hachage polynomial
-    unsigned int hashValue = 0;
+std::string sha256(const std::string str) {
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256_CTX sha256;
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, str.c_str(), str.size());
+    SHA256_Final(hash, &sha256);
     
-    for (char c : input) {
-        hashValue = hashValue * prime + c;
+    std::string output;
+    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+        char buffer[3];
+        sprintf(buffer, "%02x", hash[i]);
+        output += buffer;
     }
     
-    return hashValue;
+    return output;
 }
 
 int main() {
     std::string input;
-    std::cout << "Entrez une chaîne de caractères à hacher : ";
+    std::cout << "Entrez une chaîne de caractères à hacher avec SHA-256: ";
     std::getline(std::cin, input);
     
-    unsigned int hashValue = hashFunction(input);
-    std::cout << "La valeur de hachage pour \"" << input << "\" est : " << hashValue << std::endl;
+    std::string output = sha256(input);
+    std::cout << "La valeur de hachage SHA-256 pour \"" << input << "\" est : " << output << std::endl;
     
     return 0;
 }
