@@ -55,6 +55,7 @@ int main() {
     std::cout << "\nDistance totale: " << distanceTotale << std::endl;
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    
     std::cout << "Temps d'exécution: " << duration.count() << " millisecondes" << std::endl;
     return 0;
 }
