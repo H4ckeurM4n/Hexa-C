@@ -3,6 +3,7 @@
 #include <limits>
 #include <algorithm>
 #include <numeric>
+#include <chrono>
 
 int trouverPlusProcheVoisin(int villeActuelle, const std::vector<int>& villesRestantes, const std::vector<std::vector<int>>& distances) {
     int minDistance = std::numeric_limits<int>::max();
@@ -17,6 +18,7 @@ int trouverPlusProcheVoisin(int villeActuelle, const std::vector<int>& villesRes
 }
 
 int main() {
+        auto start = std::chrono::high_resolution_clock::now();
     // Exemple de matrice de distances entre les villes
     std::vector<std::vector<int>> distances = {
         {0, 10, 15, 20},
@@ -51,6 +53,8 @@ int main() {
         std::cout << ville << " ";
     }
     std::cout << "\nDistance totale: " << distanceTotale << std::endl;
-
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    std::cout << "Temps d'exécution: " << duration.count() << " millisecondes" << std::endl;
     return 0;
 }
