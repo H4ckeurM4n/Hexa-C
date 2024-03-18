@@ -19,19 +19,25 @@ int trouverPlusProcheVoisin(int villeActuelle, const std::vector<int>& villesRes
 
 int main() {
         auto start = std::chrono::high_resolution_clock::now();
-    // Exemple de matrice de distances entre les villes
-    std::vector<std::vector<int>> distances = {
-        {0, 10, 15, 20},
-        {10, 0, 35, 25},
-        {15, 35, 0, 30},
-        {20, 25, 30, 0}
-    };
+
+std::vector<std::vector<int>> distances = {
+    {0, 10, 20, 30, 40, 50, 60, 70, 80, 90},
+    {10, 0, 15, 25, 35, 45, 55, 65, 75, 85},
+    {20, 15, 0, 10, 20, 30, 40, 50, 60, 70},
+    {30, 25, 10, 0, 10, 20, 30, 40, 50, 60},
+    {40, 35, 20, 10, 0, 10, 20, 30, 40, 50},
+    {50, 45, 30, 20, 10, 0, 10, 20, 30, 40},
+    {60, 55, 40, 30, 20, 10, 0, 10, 20, 30},
+    {70, 65, 50, 40, 30, 20, 10, 0, 10, 20},
+    {80, 75, 60, 50, 40, 30, 20, 10, 0, 10},
+    {90, 85, 70, 60, 50, 40, 30, 20, 10, 0}
+};
 
     std::vector<int> villes(distances.size());
-    std::iota(villes.begin(), villes.end(), 0); // Initialise les villes de 0 à N-1
+    std::iota(villes.begin(), villes.end(), 0);
 
-    std::vector<int> chemin; // Chemin du voyageur
-    chemin.push_back(0); // Commence toujours par la ville 0 pour cet exemple
+    std::vector<int> chemin;
+    chemin.push_back(0); 
     int distanceTotale = 0;
 
     while (chemin.size() < distances.size()) {
@@ -45,7 +51,7 @@ int main() {
         distanceTotale += distances[villeActuelle][villePlusProche];
     }
 
-    // Ajouter la distance pour revenir à la ville de départ
+
     distanceTotale += distances[chemin.back()][chemin.front()];
 
     std::cout << "Chemin: ";

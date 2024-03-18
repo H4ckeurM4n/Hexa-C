@@ -4,7 +4,7 @@
 
 using namespace std;
 
-// Fonction pour afficher la carte
+
 void afficherMap(const vector<vector<char>>& map) {
     for (const auto& ligne : map) {
         for (char caseMap : ligne) {
@@ -20,11 +20,11 @@ int main() {
         {' ', 'X', ' ', 'X', ' '},
         {' ', ' ', ' ', ' ', ' '},
         {' ', 'X', ' ', 'X', ' '},
-        {' ', ' ', ' ', ' ', 'P'} // Position initiale du joueur
+        {' ', ' ', ' ', ' ', 'P'} 
     };
 
-    int posX = 4; // Position initiale X du joueur
-    int posY = 4; // Position initiale Y du joueur
+    int posX = 4; 
+    int posY = 4; 
 
     string commande;
     bool jeuEnCours = true;
@@ -39,7 +39,7 @@ int main() {
             continue;
         }
 
-        // Mise à jour de la position en fonction de l'input
+
         int nouvellePosX = posX;
         int nouvellePosY = posY;
 
@@ -48,13 +48,13 @@ int main() {
         else if (commande == "gauche" && posY > 0) nouvellePosY--;
         else if (commande == "droite" && posY < map[0].size() - 1) nouvellePosY++;
 
-        // Vérifier si la nouvelle position est un mur
+
         if (map[nouvellePosX][nouvellePosY] == 'X') {
             cout << "Vous ne pouvez pas traverser un mur!" << endl;
             continue;
         }
 
-        // Mise à jour de la carte avec la nouvelle position du joueur
+
         map[posX][posY] = ' ';
         posX = nouvellePosX;
         posY = nouvellePosY;
