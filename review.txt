@@ -1,0 +1,22 @@
+Le but de l'exercice d'encryption était de vous faire implémenter vous même la logique.
+Ici que signifient CTX ou encore DIGEST_LENGTH par rapport à votre logique?
+Que font les fonctions SHA256_Init, SHA256_Update et SHA256_Final ?
+Comment pouvez vous savoir que vous avez le résultat que vous souhaitez ?
+Evitez d'utiliser du code sans le comprendre entièrement, vous êtes reponsable de ce que vous produisez.
+
+On préfère utiliser les méthodes des objets mises à disposition,
+par exemple distances.get(villeActuelle).get(ville) au lieu de distances[villeActuelle][ville]
+
+L'exerice du voyageur de commerce est clairement exprimé.
+De même pour le labyrinthe avec des noms assez précis.
+
+Une approche orientée objet aurait été appréciée et vous facilitera la tache pour organiser votre code.
+On peut par exemple imaginer une classe Jeu qui contienne des objets Pixel et une methode afficher
+D'un autre coté une classe Joueur qui a une positionX, une positionY et une methode bouger
+Cela permet ensuite d'avoir une syntaxe très lisible, où les détails techniques sont encapsulés derrière des abstractions.
+Par exemple chaque pixel peut avoir un attribut "est_un_passage", qui renvoie vrai ou faux en fonction du dessin,
+le code appelant pourra faire abstraction de ces détails et appeler
+joueur.bouger(bloc_du_haut) ou par exemple if (bloc_du_haut.est_un_passage) {position = nouvellePos}
+Vous pourrez plus facilement le faire évoluer.
+
+14/20
