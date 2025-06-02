@@ -1,44 +1,13 @@
-✅ Étapes de vérification avant de valider une demande Mailinblack :
-	1.	Contexte de l’échange :
-	•	Est-ce que l’agent attendait un message de ce prestataire ?
-	•	Le nom du prestataire est-il connu et légitime dans votre SI ?
-	•	Y a-t-il eu un premier échange initié par l’agent ou par le prestataire ?
-	2.	Adresse e-mail de l’expéditeur :
-	•	Vérifie que le domaine de l’expéditeur est cohérent avec celui du prestataire (@nomdomaine.com, etc.).
-	•	Attention aux domaines ressemblants (ex : @microsoft-support.com vs @microsoft.com).
-	3.	Contenu du mail Mailinblack :
-	•	Le mail doit venir de l’adresse officielle de Mailinblack (ex : notification@mailinblack.com).
-	•	Le lien doit pointer vers un domaine légitime de Mailinblack (https://antispam.mailinblack.com/...).
-	•	Passe la souris sur les liens sans cliquer, vérifie qu’il n’y a pas de redirection suspecte.
-	4.	Authenticité du prestataire :
-	•	Si doute : tu peux appeler ou écrire au prestataire par un autre canal déjà validé pour confirmer l’envoi du message.
-
-⸻
-
-🟨 En cas de doute :
-	•	Dis-lui de ne rien cliquer pour l’instant.
-	•	Récupère le mail complet (avec entêtes si nécessaire) pour analyse.
-	•	Tu peux aussi vérifier les logs sur la passerelle ou sur l’interface d’administration Mailinblack si tu y as accès.
-
-⸻
-
-🟩 Réponse type que tu peux lui envoyer si c’est légitime :
-
-Bonjour,
-
-Merci pour votre vigilance. Après vérification, le message provient bien d’un prestataire légitime et la demande d’authentification Mailinblack est conforme.
-Vous pouvez donc valider cette demande pour recevoir les futurs échanges.
-
-Bien cordialement,
-
-Bonjour [Prénom],
-
 Merci pour votre vigilance.
 
 La demande d’authentification Mailinblack semble légitime, dans la mesure où elle fait suite à l’échange que vous avez récemment eu avec le prestataire.
-Pouvez-vous me confirmer qu’il s’agit bien d’un interlocuteur connu et attendu dans le cadre de votre mission ?
-Par ailleurs, l’adresse e-mail utilisée par l’expéditeur correspond-elle bien à celle de votre contact habituel chez ce prestataire ?
+Pouvez-vous me confirmer :
+	•	qu’il s’agit bien d’un interlocuteur connu et attendu dans le cadre de votre mission ;
+	•	que l’adresse e-mail utilisée correspond bien à celle de votre contact habituel ;
+Que vous aviez été informée en amont de cette procédure (demande d’authentification ou validation via Mailinblack) ?
 
-Sous réserve de ces éléments, vous pouvez valider la demande pour autoriser la réception des futurs messages.
+Si vous avez un doute sur l’un de ces points, je vous recommande de recontacter votre interlocuteur par un canal déjà connu (téléphone, email précédent…) pour vous assurer qu’il est bien à l’origine de l’envoi.
 
-Je reste à disposition en cas de doute.
+Dans le cas contraire, et si tout est cohérent, vous pouvez valider la demande afin de recevoir les futurs échanges.
+
+Je reste à disposition si besoin.
