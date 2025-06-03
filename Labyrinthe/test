@@ -1,3 +1,5 @@
+Ce type de message peut être envoyé à l’adresse de destination, même s’il s’agit d’une boîte personnelle. Le système de sécurité identifie cette adresse comme destinataire légitime, même si l’expéditeur pensait s’adresser à votre compte anonyme et n’avait pas conscience que le message serait redirigé vers votre adresse personnelle.
+
 Merci pour votre alerte.
 
 Le message que vous avez reçu sur votre boîte mail personnelle est légitime.
