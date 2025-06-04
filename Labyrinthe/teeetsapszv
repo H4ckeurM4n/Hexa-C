@@ -1,0 +1,13 @@
+Bonjour,
+
+Je fais suite au point concernant l’outil “Sauvegarde&Restauration” développé en interne.
+
+L’exécution de cet utilitaire est actuellement bloquée sur les postes utilisateurs en raison des restrictions imposées par les règles AppLocker. Une tentative de contournement via la commande RunAs, en utilisant un compte administrateur, a été effectuée.
+
+Toutefois, cette méthode modifie l’environnement d’exécution : l’outil hérite alors des variables du compte administrateur (ex. : %USERPROFILE%, %APPDATA%), ce qui conduit à sauvegarder les données de la session administrateur, et non celles de l’utilisateur connecté. La restauration n’aurait donc pas d’intérêt, car elle ne porterait pas sur les données de l’utilisateur ciblé.
+
+Cela compromet la finalité même de l’outil, qui ne fonctionne alors pas comme attendu dans son contexte d’usage.
+
+Des ajustements seront à envisager, soit au niveau de la configuration AppLocker, soit dans le code de l’outil pour garantir un comportement adapté à l’environnement utilisateur.
+
+Bien cordialement,
