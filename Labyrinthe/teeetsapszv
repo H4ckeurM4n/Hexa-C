@@ -1,13 +1,23 @@
 Bonjour,
+1. Fonctionnement validé sous Windows 10
+	•	L’outil peut être exécuté directement par un utilisateur standard.
+	•	La sauvegarde s’effectue correctement.
+	•	Un dossier de sauvegarde est généré, contenant :
+• les répertoires du profil utilisateur (Bureau, Documents, Images, etc.)
+• les favoris des navigateurs (Edge, Firefox).
 
-Je fais suite au point concernant l’outil “Sauvegarde&Restauration” développé en interne.
+2. Blocage constaté sous Windows 11
+	•	L’exécution de l’outil est bloquée par les règles AppLocker sur les postes utilisateurs.
+	•	Une tentative de contournement via un compte administrateur a été réalisée.
 
-L’exécution de cet utilitaire est actuellement bloquée sur les postes utilisateurs en raison des restrictions imposées par les règles AppLocker. Une tentative de contournement via la commande RunAs, en utilisant un compte administrateur, a été effectuée.
+3. Limitation fonctionnelle liée à la restauration
+	•	L’outil ne propose pas de sélectionner le profil utilisateur à restaurer.
+	•	Il récupère automatiquement le nom (ou identifiant) de la session en cours.
+	•	Lorsqu’il est exécuté avec le compte administrateur (ex. : Sys-T2), la restauration cible ce profil au lieu de celui de l’utilisateur.
+	•	Cela rend l’opération inopérante dans le contexte d’un changement de poste ou d’un besoin de restauration utilisateur.
 
-Toutefois, cette méthode modifie l’environnement d’exécution : l’outil hérite alors des variables du compte administrateur (ex. : %USERPROFILE%, %APPDATA%), ce qui conduit à sauvegarder les données de la session administrateur, et non celles de l’utilisateur connecté. La restauration n’aurait donc pas d’intérêt, car elle ne porterait pas sur les données de l’utilisateur ciblé.
+4. Proposition d’évolution
 
-Cela compromet la finalité même de l’outil, qui ne fonctionne alors pas comme attendu dans son contexte d’usage.
+J’ai évoqué la possibilité d’adapter l’outil pour permettre la sélection manuelle du profil cible lors de la restauration.
 
-Des ajustements seront à envisager, soit au niveau de la configuration AppLocker, soit dans le code de l’outil pour garantir un comportement adapté à l’environnement utilisateur.
-
-Bien cordialement,
+En l’état, l’outil ne peut pas être utilisé sur Windows 11, en raison à la fois des restrictions AppLocker et de la gestion automatique du contexte utilisateur lors de la restauration.
