@@ -1,4 +1,12 @@
-Voici les principaux éléments abordés lors de la réunion tenue le [date à compléter] avec le bureau projet et les équipes concernées.
+Pour ma part, j’ai exprimé mon avis favorable au maintien de ce point de suivi en réunion, car il me semble essentiel pour la fonction SSI, à plusieurs titres :
+	•	Cela permet d’intégrer les exigences de sécurité dès les phases amont des projets (Security by Design), plutôt que de devoir intervenir en mode correctif.
+	•	Ces points offrent une vision d’ensemble utile pour identifier les briques techniques, anticiper les risques SSI, et proposer des mesures adaptées au contexte.
+	•	Ils facilitent le dialogue avec les chefs de projet et les métiers, en assurant une meilleure coordination entre les impératifs fonctionnels et les exigences de sécurité.
+	•	C’est également un moyen de prévenir les dérives de type Shadow IT, en ayant de la visibilité sur les initiatives en cours.
+	•	Enfin, cela permet de planifier en amont les actions SSI nécessaires (analyses de risque, homologation, tests, documentation), en lien avec les futures mises en production.
+
+
+ les principaux éléments abordés lors de la réunion tenue le [date à compléter] avec le bureau projet et les équipes concernées.
 
 🔹 1. Suivi des projets internes/externes
 	•	Pierre (Chef de projet) souhaite recenser l’ensemble des projets internes et ceux pouvant être externalisés, via un fichier Excel. Objectifs :
