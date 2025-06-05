@@ -1,3 +1,15 @@
+Pour votre bonne information,
+le tableau de suivi des incidents de sécurité a récemment évolué.
+
+Une feuille dédiée au suivi des cas de smishing (phishing par SMS) a été ajoutée. Elle permet de centraliser les IOCs (numéros de téléphone, URL malveillantes, etc.) afin de recenser et capitaliser les informations collectées de manière structurée.
+
+Chaque incident est désormais référencé de manière unique (ex. : SMISH-xxx) pour améliorer le suivi et la lisibilité des signalements.
+
+Un dossier contenant les captures d’écran des SMS signalés a également été créé, toujours dans une logique de documentation et d’enrichissement continu des données disponibles.
+
+N’hésitez pas à contribuer ou à consulter ces éléments si besoin.
+
+
 Bonjour,
 1. Fonctionnement validé sous Windows 10
 	•	L’outil peut être exécuté directement par un utilisateur standard.
