@@ -1,0 +1,97 @@
+# Étude de durcissement du BIOS des postes de travail
+
+## 1. Contexte et objectifs
+
+Le BIOS (ou UEFI) constitue une couche critique du système d’amorçage d’un poste de travail.  
+Sa compromission permet à un attaquant de **prendre le contrôle du système avant même le chargement du système d’exploitation**, avec un **haut niveau de persistance**.
+
+Dans ce contexte, le présent document vise à définir les **mesures de durcissement du BIOS** à appliquer sur les postes de travail, afin de **réduire les risques d’attaques physiques et logicielles** au niveau pré-boot.
+
+## 2. Recommandations de durcissement
+
+### 2.1. Restreindre l’accès au BIOS
+
+- **Mesure recommandée** : Mise en place d’un mot de passe administrateur BIOS/UEFI.  
+- **Objectif** : Empêcher toute modification non autorisée de la configuration (ordre de boot, activation de ports, etc.).  
+- **Risques en cas d’absence** : Démarrage sur un support externe non sécurisé (ex : live USB), facilitant le contournement de la sécurité du système.  
+- **Point de vigilance** : Prévoir une gestion centralisée ou déléguée des mots de passe pour éviter les blocages en cas d’oubli.
+
+### 2.2. Désactiver les périphériques de boot non nécessaires
+
+- **Mesure recommandée** : Désactivation des ports de démarrage inutiles dans le BIOS : USB, FireWire, Thunderbolt, lecteur optique, PXE, etc.  
+- **Objectif** : Réduire la surface d’attaque en bloquant les périphériques externes susceptibles d’être utilisés pour une compromission.  
+- **Risques en cas d’absence** : Bootkits, vol de données, ou exécution de systèmes non maîtrisés via USB ou réseau.  
+- **Contraintes métier possibles** : Certains environnements peuvent nécessiter temporairement le boot réseau (ex : déploiement PXE).
+
+### 2.3. Activer le mécanisme Secure Boot
+
+- **Mesure recommandée** : Activation de Secure Boot dans les firmwares UEFI.  
+- **Objectif** : Garantir que seuls les systèmes signés et de confiance peuvent s’exécuter au démarrage.  
+- **Risques en cas d’absence** : Injections de code malveillant dans le bootloader (bootkits, rootkits).  
+- **Point de vigilance** : Tester la compatibilité avec tous les OS déployés, notamment les distributions Linux.
+
+### 2.4. Activer les protections d’intégrité au démarrage
+
+- **Mesures recommandées** :
+  - Activation du **TPM** (Trusted Platform Module)  
+  - Activation des fonctions de **mesure d’intégrité** (ex : Measured Boot, Intel Boot Guard)  
+  - Surveillance des événements via **EDR ou SIEM compatibles**
+
+- **Objectif** : Détecter toute modification non autorisée de la chaîne de démarrage.  
+- **Risques en cas d’absence** : Présence furtive d’un malware dans le firmware (ex : LoJax, BlackLotus).  
+- **Point de vigilance** : Un TPM mal configuré peut engendrer des alertes inutiles ou une fausse impression de sécurité.
+
+### 2.5. Assurer la mise à jour régulière du BIOS
+
+- **Mesure recommandée** : Procéder régulièrement aux mises à jour BIOS, uniquement via des sources éditeurs vérifiées.  
+- **Objectif** : Corriger les vulnérabilités connues (privilèges, escalades, contournements de protections).  
+- **Risques en cas d’absence** : Exploitation de failles non corrigées pour persistance ou exécution de code à haut privilège.  
+- **Point de vigilance** : Vérifier en amont la compatibilité sur un échantillon de machines avant généralisation.
+
+### 2.6. Assurer une traçabilité des modifications BIOS
+
+- **Mesure recommandée** : Suivre les modifications BIOS via des outils d’inventaire ou de sécurité (EDR/MDM).  
+- **Objectif** : Détecter les changements non autorisés ou suspects.  
+- **Risques en cas d’absence** : Compromission du BIOS non détectée, perte d’intégrité des postes.  
+- **Limite actuelle** : Peu de solutions permettent un suivi complet du firmware à distance.
+
+### 2.7. Verrouiller la configuration physique
+
+- **Mesures recommandées** :
+  - Empêcher la réinitialisation CMOS (par verrouillage physique ou scellés)  
+  - Désactiver la mise à jour du BIOS depuis l’OS, si la plateforme le permet
+
+- **Objectif** : Empêcher la reconfiguration non autorisée ou la réinitialisation frauduleuse.  
+- **Risques en cas d’absence** : Attaques de type "Evil Maid" (accès physique à un poste pour l’altérer).
+
+### 2.8. Intégrer le durcissement dans la gouvernance SSI
+
+- **Mesure recommandée** :
+  - Intégrer les exigences BIOS dans la **PSSI** (Politique de Sécurité du Système d’Information)  
+  - Ajouter des points de contrôle BIOS dans les **checklists de déploiement et audits techniques**
+
+- **Objectif** : Garantir une cohérence dans le temps et sur l’ensemble du parc.  
+- **Risques en cas d’absence** : Hétérogénéité du niveau de sécurité, postes vulnérables non identifiés.
+
+## 3. Conclusion
+
+Le **durcissement du BIOS** est une **mesure de sécurité essentielle**, souvent négligée, mais qui constitue une **ligne de défense stratégique** contre les compromissions avancées.
+
+Son application nécessite à la fois :
+- Une **coordination technique avec les équipes IT** (compatibilité, gestion des mots de passe, mises à jour)
+- Une **intégration dans les processus de sécurité** (gouvernance, audits, gestion de parc)
+
+L’ensemble des mesures recommandées ci-dessus doit être évalué en fonction de la **criticité des postes concernés** (utilisateurs sensibles, machines administrateurs, environnements isolés) et inscrit dans une **démarche globale de durcissement des postes de travail**.
+
+## Tableau récapitulatif
+
+| **N°** | **Mesure**                                                            | **Objectif**                                            | **Risque en cas de non-application**                            | **Points de vigilance / freins**                  |
+|--------|-----------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------------------------------|---------------------------------------------------|
+| 1      | Activer un mot de passe BIOS/UEFI (admin)                             | Empêcher les modifications non autorisées (boot, ports) | Démarrage sur support non autorisé (ex : live USB)              | Nécessite gestion centralisée des mots de passe   |
+| 2      | Désactiver les périphériques de boot inutiles (USB, PXE, etc.)        | Réduire la surface d’attaque physique                   | Bootkits, vol de données via périphériques externes             | Certains usages nécessitent le PXE (déploiement)  |
+| 3      | Activer Secure Boot                                                   | Bloquer l’exécution de systèmes non signés              | Compromission du bootloader (bootkit/rootkit)                   | Risque d’incompatibilité avec certains OS         |
+| 4      | Activer TPM + Measured Boot / Intel Boot Guard                        | Assurer l’intégrité de la chaîne de démarrage           | Persistance d’un malware firmware (LoJax, BlackLotus)           | TPM mal configuré = faux sentiment de sécurité    |
+| 5      | Mettre à jour régulièrement le BIOS                                   | Corriger les vulnérabilités critiques                   | Exploitation de failles non corrigées (persistence, privilèges) | Risque d’instabilité si non testé en amont        |
+| 6      | Tracer les modifications BIOS (via EDR/MDM)                           | Détecter tout changement suspect ou non autorisé        | Compromission silencieuse du BIOS                               | Peu d’outils supportent cette fonction à distance |
+| 7      | Interdire la réinitialisation CMOS et le flash BIOS depuis l’OS       | Protéger contre les altérations physiques du BIOS       | Attaques physiques (ex : Evil Maid)                             | Nécessite verrouillage matériel ou scellés        |
+| 8      | Intégrer les règles dans la PSSI, procédures de déploiement et audits | Assurer cohérence et conformité sur tout le parc        | Hétérogénéité des niveaux de sécurité                           | Demande coordination entre SSI et IT              |
