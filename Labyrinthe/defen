@@ -1,0 +1,53 @@
+| Event ID | Description courte                             | Utilité en surveillance                                |
+|----------|------------------------------------------------|--------------------------------------------------------|
+| **1000** | Service lancé                                  | Vérifie que Defender est actif                        |
+| **1001** | Mise à jour de définition                      | Suivi des mises à jour antivirus                      |
+| **1004** | Analyse planifiée terminée                     | Permet d’auditer les scans réguliers                  |
+| **1005** | Analyse manuelle terminée                      | Détection d’actions utilisateur                       |
+| **1006** | **Détection de malware (notification)**        | Point de départ : menace détectée                     |
+| **1007** | **Suppression réussie du malware**             | Confirme action de nettoyage                          |
+| **1008** | Suppression échouée                            | Détecte les remédiations manquées                     |
+| **1010** | Menace toujours présente après action          | À investiguer en priorité                             |
+| **1011** | Menace supprimée après redémarrage             | OK mais nécessite reboot                              |
+| **1015** | **Échec de la quarantaine**                    | Risque élevé – fichier encore actif                   |
+| **1016** | **Fichier mis en quarantaine**                 | Action réussie – menace neutralisée                   |
+| **1116** | Détection malware (déclencheur générique)      | Alternative à 1006 selon config                       |
+| **1117** | Menace détectée et bloquée                     | Défense en temps réel efficace                        |
+| **1118** | Menace supprimée                               | Suppression confirmée                                 |
+| **1119** | Fichier mis en quarantaine (variante 1016)     | Même logique, parfois plus complet                    |
+| **1120** | Échec mise en quarantaine                      | À suivre comme 1015                                   |
+| **5007** | **Modification des paramètres de Defender**    | Potentiel contournement / attaque                     |
+
+
+FROM winlogbeat-*
+WHERE winlog.event_id IN (1006, 1007, 1015, 1016)
+| STATS count() BY winlog.event_id
+
+
+
+⸻
+
+🛡️ Dashboard Windows Defender – Visualisations proposées
+
+🔢 N°	🎯 Objectif	📊 Visualisation	🧩 Champs utilisés	🧠 Remarques
+1	Suivi global des menaces	Nombre total d’événements de sécurité Defender (barre ou compteur)	winlog.event_id IN (1006, 1007, 1015, 1016)	Donne un aperçu global
+2	Tendance dans le temps	Graphe temporel des détections (1h, 1j)	@timestamp, winlog.event_id == 1006	Permet de repérer des pics
+3	Analyse des menaces	Top 10 des menaces détectées	winlog.event_data.ThreatName	Idéal pour Threat Intel ou priorisation
+4	Machines à risque	Top postes infectés	host.name, winlog.event_id == 1006	Priorise les machines à auditer
+5	Suivi utilisateur	Top utilisateurs concernés	user.name, winlog.event_id == 1006	(si disponible)
+6	Action entreprise	Répartition par type d’action	winlog.event_data.Action	Montrer efficacité : quarantined, cleaned, failed
+7	Menaces encore présentes	Focus sur les échecs de quarantaine	winlog.event_id == 1015, ThreatName, host.name	Cas critique à investiguer
+8	État des fichiers détectés	Tableau des fichiers mis en quarantaine	winlog.event_data.Path, ThreatName, @timestamp	Visualise les vecteurs
+9	Surveillance de l’intégrité	Modifications de paramètres Defender	winlog.event_id == 5007, user.name, host.name	Potentiel contournement
+10	Vue synthétique rapide	Camembert des types d’événements (1006, 1007, 1016…)	winlog.event_id	Vue d’ensemble très lisible
+
+
+
+
+Voici 3 à 4 visualisations que tu pourrais remonter en synthèse dans ton dashboard principal :
+	•	✅ Total alertes Defender (visu 1)
+	•	📈 Évolution temporelle (visu 2)
+	•	🖥️ Top machines (visu 4)
+	•	❌ Actions échouées (visu 7 ou 9)
+
+
