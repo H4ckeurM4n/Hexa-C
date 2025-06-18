@@ -1,4 +1,70 @@
+15. MavInject32.exe
+	•	Type : Potentiellement malveillant / Utilitaire système détourné
+	•	Risque : Peut être utilisé pour injecter du code dans des processus (Process Hollowing)
+	•	Description : Binaire légitime de Windows (mavinject.exe) souvent abusé par des malwares pour contourner les protections. S’il est utilisé hors de son contexte normal, c’est suspect.
 
+⸻
+
+16. Defraggler/branding.fll
+	•	Type : Trojan (ClamAV) – Win.Trojan.Agent
+	•	Risque : Infection dans un utilitaire de défragmentation (Piriform)
+	•	Description : *.fll est une librairie – présence d’un trojan dans un module support indique un fichier compromis ou un faux utilitaire.
+
+⸻
+
+17. AutoPico.exe
+	•	Type : Crack / Agent malveillant
+	•	Risque : Partie de KMSpico, utilisé pour contourner l’activation Windows
+	•	Description : Fréquemment accompagné de trojans ou de logiciels espions. Source d’infection connue.
+
+⸻
+
+18. KMSELDI.exe
+	•	Type : Malware / Crack
+	•	Risque : Binaire principal du KMS Emulator
+	•	Description : Fichier le plus souvent infecté par des charges utiles (trojan, RAT). Activement détecté comme malveillant par la plupart des antivirus.
+
+⸻
+
+19. Service_KMS.exe
+	•	Type : Composant d’activation illégale
+	•	Risque : Exécuté en tant que service – persistance possible
+	•	Description : Ajoute une tâche planifiée ou un service Windows pour maintenir l’activation illégale. Souvent porte d’entrée pour des attaques secondaires.
+
+⸻
+
+20. AcroForm.api
+	•	Type : API Acrobat Reader (PDF)
+	•	Risque : Fichier légitime, à surveiller pour modification ou remplacement
+	•	Description : Module lié aux formulaires dans Adobe Acrobat. Si infecté, peut être un vecteur de vulnérabilité.
+
+⸻
+
+21. Acrobat/plug_ins/Multimedia.api
+	•	Type : Composant multimédia d’Acrobat
+	•	Risque : Fichier légitime, mais peut être remplacé ou utilisé pour l’exécution de scripts embarqués
+	•	Description : Ce plugin permet la lecture de contenu multimédia dans des PDF. Peu surveillé, donc parfois ciblé.
+
+⸻
+
+22. Acrobat/…/Search.api
+	•	Type : Composant de recherche
+	•	Risque : Peu de risque direct, mais possibilité d’abus si altéré
+	•	Description : Permet la recherche dans les documents. À vérifier via hash si modification soupçonnée.
+
+⸻
+
+23. Acrobat/…/SendMail.api
+	•	Type : Plugin d’envoi de mail
+	•	Risque : Peut être utilisé pour automatiser l’exfiltration de données (si compromis)
+	•	Description : Composant légitime, mais si utilisé par un malware, peut envoyer des fichiers PDF ou journaux hors de l’environnement.
+
+⸻
+
+24. Acrobat/…/Speilling.api (probablement Spelling.api avec faute ou fichier corrompu)
+	•	Type : Plugin de vérification orthographique
+	•	Risque : Fichier suspect si mal orthographié ou modifié
+	•	Description : S’il s’agit d’un faux fichier (Speilling), alors clairement malveillant ou injecté. À comparer avec un Acrobat sain.
 
 -PowerISO7-x64.exe : 2 menaces associés : (avira) PUA/AD.FusionCore.mic - object | PUA/AD.InstallCore.bmsb
 
