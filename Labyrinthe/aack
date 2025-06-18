@@ -1,3 +1,36 @@
+
+
+-PowerISO7-x64.exe : 2 menaces associés : (avira) PUA/AD.FusionCore.mic - object | PUA/AD.InstallCore.bmsb
+
+-system32/autochk.exe : (clamav) Win.Malware.Generic-9883041-0
+
+-system21/autoconv.exe : (clamav) Win.Malware.Generic-9883041-0
+
+-system32/autofmt.exe : (clamav) Win.Malware.Generic-9883041-0
+
+-autochk.exe : (clamav) Win.Malware.Generic-9883041-0
+
+-autofmt.exe : (clamav) Win.Malware.Generic-9883041-0
+
+-autoconv.exe : (clamav) Win.Malware.Generic-9883041-0
+
+-OInstall.exe : (clamav) Win.Backdoor.RATAgent-10007372-1
+
+-armsvc.exe : (clamav) Win.Virus.Expiro-9969767-0
+
+-SECOH-OAD.dll : (clamav) Win.Malware.Agent-6404609-0
+
+-AppData/Roaming/BitTorrent/Updates/7.10.3_44359.exe : (clamav) Win.Virus.Pioneer-6622830-0
+
+-bittorentie.exe : (clamav) Win.Virus.Pioneer-6622830-0
+
+-KMSpico.setup.exe : (clamav) Win.Malware.Agent-6369644-0
+
+-microsoft-shared/ClickToRun/Malinject32.exe : (clamav) Win.Ransomware.Azvo-9979243-0
+
+
+
+
 1. PowerISO7-x64.exe
 	•	Type : PUA / Adware
 	•	Risque : Logiciel d’installation avec composants indésirables (adwares, barre d’outils, etc.)
