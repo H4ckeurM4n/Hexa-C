@@ -1,0 +1,93 @@
+1. PowerISO7-x64.exe
+	•	Type : PUA / Adware
+	•	Risque : Logiciel d’installation avec composants indésirables (adwares, barre d’outils, etc.)
+	•	Description : FusionCore et InstallCore sont des installateurs souvent modifiés pour embarquer des offres tierces, parfois malveillantes.
+
+⸻
+
+2. system32/autochk.exe
+	•	Type : Malware générique (ClamAV)
+	•	Risque : Fichier système potentiellement modifié ou infecté
+	•	Description : autochk.exe est un utilitaire Windows pour vérifier les disques au démarrage – toute altération peut servir à la persistance.
+
+⸻
+
+3. system21/autoconv.exe
+	•	Type : Malware générique (ClamAV)
+	•	Risque : Copie suspecte d’un binaire système
+	•	Description : system21 n’est pas un chemin standard — possible duplication d’un outil système légitime pour contourner la détection.
+
+⸻
+
+4. system32/autofmt.exe
+	•	Type : Malware générique (ClamAV)
+	•	Risque : Même logique, binaire système modifié
+	•	Description : autofmt.exe sert au formatage de volume — potentiellement utilisé pour automatiser des actions malveillantes à bas niveau.
+
+⸻
+
+5. autochk.exe
+	•	Type : Malware générique (ClamAV)
+	•	Risque : Double présence du fichier → soupçon de persistance ou redondance malveillante
+	•	Description : Cf. point 2.
+
+⸻
+
+6. autofmt.exe
+	•	Type : Malware générique (ClamAV)
+	•	Risque : Cf. point 4.
+
+⸻
+
+7. autoconv.exe
+	•	Type : Malware générique (ClamAV)
+	•	Risque : Cf. point 3.
+
+⸻
+
+8. OInstall.exe
+	•	Type : Backdoor (ClamAV)
+	•	Risque : Téléchargeur / gestionnaire Office piraté, souvent associé à des RAT
+	•	Description : Outil d’installation non-officiel d’Office, utilisé dans des cracks. Fréquemment distribué avec des portes dérobées.
+
+⸻
+
+9. armsvc.exe
+	•	Type : Virus (ClamAV) – famille Expiro
+	•	Risque : Injection de code dans exécutables, infection polymorphe
+	•	Description : armsvc.exe est un service légitime Adobe, souvent ciblé pour se camoufler.
+
+⸻
+
+10. SECOH-OAD.dll
+	•	Type : Agent malveillant (ClamAV)
+	•	Risque : DLL associée à des outils d’activation illégaux (KMS)
+	•	Description : DLL générée par certains cracks Microsoft pour faire croire à une activation légitime.
+
+⸻
+
+11. AppData/Roaming/BitTorrent/Updates/7.10.3_44359.exe
+	•	Type : Virus (ClamAV) – Pioneer
+	•	Risque : Fichier infecté dans un dossier de mise à jour d’un client P2P
+	•	Description : Contamination probable via téléchargement non vérifié.
+
+⸻
+
+12. bittorentie.exe
+	•	Type : Virus (ClamAV) – Pioneer
+	•	Risque : Variante ou renommage malveillant du client BitTorrent
+	•	Description : Fichier probablement infecté ou utilisé comme vecteur de diffusion.
+
+⸻
+
+13. KMSpico.setup.exe
+	•	Type : Malware (ClamAV) – Agent
+	•	Risque : Activateur piraté contenant du code malveillant
+	•	Description : KMSpico est une solution de crack Windows très répandue, connue pour embarquer des trojans ou backdoors.
+
+⸻
+
+14. microsoft-shared/ClickToRun/Malinject32.exe
+	•	Type : Ransomware (ClamAV) – Azvo
+	•	Risque : Exécutable potentiellement chiffrant des fichiers
+	•	Description : Nom suggère un fichier injecté dans l’environnement Office, probablement pour se déclencher à l’ouverture.
