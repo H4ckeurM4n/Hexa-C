@@ -1,3 +1,39 @@
+Fichier analysé
+
+Users/WiN10.1/AppData/Roaming/PowerISO/Upgrade/PowerISO7-x64.exe
+
+⸻
+
+🛡️ Détections Avira :
+	•	PUA/AD.FusionCore.mic
+	•	PUA/AD.InstallCore.bmsb
+
+⸻
+
+🔎 Analyse des signatures PUA détectées
+
+1. PUA/AD.FusionCore.mic
+	•	PUA = Potentially Unwanted Application
+	•	FusionCore est un moteur d’installation souvent utilisé pour empaqueter des logiciels gratuits avec des composants tiers (adwares, barres d’outils, modificateurs de page d’accueil…).
+	•	.mic est une sous-signature Avira, indiquant probablement une variante ou une configuration spécifique du bundle.
+
+✅ Ce n’est pas un malware actif, mais :
+⚠️ Il installe en silence d’autres programmes non sollicités, parfois malveillants (téléchargeurs, miners…).
+
+⸻
+
+2. PUA/AD.InstallCore.bmsb
+	•	InstallCore est un autre moteur de bundling publicitaire, largement abusé.
+	•	Il est officiellement classé comme PUA par de nombreux éditeurs (Avira, Malwarebytes, Sophos, Microsoft…).
+	•	Ce type de package est fréquemment utilisé pour diffuser des adwares, voire des chevaux de Troie via des téléchargements “gratuits” ou “crackés”.
+
+⸻
+
+⚠️ Ce que cela implique
+	•	Le fichier PowerISO7-x64.exe n’est pas directement un virus, mais il provient d’une source non fiable ou modifiée.
+	•	Il installe potentiellement autre chose que PowerISO (comportement typique de crack/bundle).
+	•	Sa présence dans AppData/Roaming/PowerISO/Upgrade est également non standard, PowerISO ne s’installe normalement pas ici → signe possible d’un exécutable téléchargé manuellement ou injecté.
+
 15. MavInject32.exe
 	•	Type : Potentiellement malveillant / Utilitaire système détourné
 	•	Risque : Peut être utilisé pour injecter du code dans des processus (Process Hollowing)
