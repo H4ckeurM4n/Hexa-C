@@ -1,0 +1,12 @@
+Bonjour à tous,
+
+Suite aux constats faits ce matin par Florian, certains événements système « classiques » n’étaient pas visibles dans l’Observateur d’événements, notamment pour les jours précédents.
+Cette problématique a bien été prise en compte, et une méthode alternative a été ajoutée dans la fiche réflexe : en passant par “Sécurité Windows”, il est possible de retrouver les éléments permettant de corréler la suppression des fichiers .dll suspects et ainsi valider un faux positif.
+
+La documentation a donc été étoffée en conséquence.
+
+➡️ La nouvelle version de la fiche réflexe est disponible ici : [Lien vers la fiche]
+
+Merci à ceux qui ont contribué à cette amélioration, et n’hésitez pas à faire remonter d’autres cas ou suggestions.
+
+Bonne journée,
