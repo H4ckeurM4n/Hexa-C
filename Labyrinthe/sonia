@@ -1,0 +1,66 @@
+Architecture typique :
+	•	Chaîne de traitement en 4 étapes :
+	1.	Pré-traitement audio : détection de bruit, séparation des canaux, normalisation.
+	2.	Reconnaissance vocale (ASR) : transcription automatique, multilingue, parfois avec séparation des locuteurs (diarisation).
+	3.	Traduction automatique (NMT) : si enregistrement dans une autre langue.
+	4.	Résumé et analyse IA (LLM) : synthèse de contenu, extraction d’éléments clés (actions, décisions, mots-clés, sentiments…).
+
+question :
+	1.	Quel moteur ASR utilisez-vous ? Propriétaire ou Whisper, DeepSpeech, etc. ?
+	2.	Est-il possible d’avoir un traitement on-premise pour des besoins sensibles ?
+	3.	Quel est le delai moyen de traitement pour une heure d’audio ?
+	4.	Les modèles peuvent-ils être adaptés à un vocabulaire métier (jargon, acronymes) ?
+	5.	L’audio est-il stocké temporairement ou définitivement ? Peut-on automatiser l’effacement ?
+  6. Diarisation ? identifier locuteur ?
+
+Audio & Traitement vocal
+	•	ASR (Automatic Speech Recognition) : Reconnaissance vocale automatique. C’est la technologie qui convertit la voix en texte. Exemple : Whisper d’OpenAI.
+	•	Diarisation : Technique permettant d’identifier et de distinguer les différents locuteurs dans un enregistrement audio (ex : « Speaker 1 », « Speaker 2 »…).
+	•	Segmentation audio : Découpage automatique d’un enregistrement en morceaux pertinents (par locuteur, par thème, par phrase…).
+	•	Transcription : Conversion d’un enregistrement audio en texte.
+	•	Speech-to-Text : Synonyme courant d’ASR (voir plus haut).
+	•	Audio pré-processing : Traitement préalable (réduction du bruit, normalisation du volume, détection de silence…).
+
+⸻
+
+🌐 Traduction & NLP
+	•	NMT (Neural Machine Translation) : Traduction automatique basée sur des réseaux de neurones. Exemples : DeepL, Google Translate, etc.
+	•	LLM (Large Language Model) : Modèle de langage de grande taille. Il peut faire du résumé, de la génération de texte, de la compréhension de langage, etc. Exemple : GPT-4, Falcon, Mistral…
+	•	Résumés extractifs / abstratifs :
+	•	Extractif : extrait des phrases directement du texte source.
+	•	Abstratif : reformule avec ses propres mots (ex : un LLM).
+	•	NER (Named Entity Recognition) : Reconnaissance des entités nommées (personnes, lieux, dates…) dans un texte.
+
+IA & performance
+	•	Inference time : Temps que prend un modèle pour produire un résultat à partir d’une entrée (ex : transcrire un fichier audio).
+	•	Fine-tuning : Personnalisation d’un modèle d’IA en l’entraînant sur des données spécifiques (ex : jargon métier, noms propres).
+
+Traitement du langage
+
+NLP (Natural Language Processing)
+
+Traitement automatique du langage naturel.
+Utilisé pour comprendre, résumer, classer ou extraire du sens depuis un texte ou une transcription.
+🔹 Exemple dans SonIA : repérage des intentions, des entités (personnes, lieux), des résumés intelligents.
+
+⸻
+
+🎛️ Traitement audio
+
+EQ (Equalizer / Égaliseur audio)
+
+Ajustement des fréquences audio (graves, médiums, aigus) pour améliorer la clarté ou retirer certains bruits.
+Utilisé au stade du pré-traitement audio, souvent automatiquement, pour “nettoyer” l’enregistrement.
+
+🔹 Exemple : réduction d’un souffle constant ou accentuation de la voix humaine autour de 1–4 kHz.
+
+⸻
+
+OTT (Over-The-Top)
+
+Terme issu de l’audiovisuel, désigne les services diffusés via Internet sans infrastructure opérateur (comme Netflix ou Zoom).
+
+Dans un contexte SonIA / ChapsVision, cela peut désigner :
+	•	Des communications OTT interceptées (WhatsApp, Signal, Telegram, etc.),
+	•	Des flux audio provenant de services distants (visio, cloud),
+	•	Ou des outils intégrés à des plateformes OTT.
