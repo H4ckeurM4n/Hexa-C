@@ -1,0 +1,10 @@
+Suite à votre demande concernant l’alerte de plus de 5 Go en upload et download, je vous informe que je ne suis pas en capacité de visualiser le contenu précis des données échangées.
+
+En effet, les flux sont chiffrés (protocole TLS), ce qui est conforme aux bonnes pratiques de sécurité, et ne permet pas l’inspection du contenu sans mise en place préalable de mécanismes spécifiques (type proxy d’inspection TLS ou déchiffrement en environnement contrôlé, ce qui n’est pas actuellement en place).
+
+Je peux uniquement accéder aux éléments suivants :
+	•	La quantité de données transférées (volume)
+	•	Les adresses source et destination
+	•	Les ports et protocoles utilisés
+
+Je reste à disposition si besoin d’une analyse plus poussée sur les endpoints ou sur la chronologie des transferts.
