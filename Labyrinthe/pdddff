@@ -1,0 +1,11 @@
+Bonjour Nathalie,
+
+Je me permets de rebondir sur le message de Nicolas concernant les sites permettant la recombinaison de fichiers PDF en ligne.
+
+Un sujet avait été initié à ce propos, visant à bloquer ces plateformes. En effet, au-delà de leurs fonctions de recombinaison, elles permettent aussi l’upload de documents potentiellement sensibles sur Internet, ce qui représente un risque non négligeable en matière de fuite d’information.
+
+À fortiori, nous disposons déjà de l’outil PDF24 installé localement sur les postes de travail des agents, qui couvre ce besoin sans exposition extérieure.
+
+Je ne sais pas si tu as accès à GLPI pour consulter la boucle d’échanges à ce sujet, mais je peux t’y renvoyer les éléments si besoin.
+
+Bien cordialement,
