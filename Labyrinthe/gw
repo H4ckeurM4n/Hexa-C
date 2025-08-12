@@ -1,0 +1,38 @@
+Yes — j’ai une idée 🙂
+
+Alerte Gatewatcher « ET SHELLCODE Possible Call with (No) Offset TCP Shellcode »
+
+Ce sont des signatures Emerging Threats (Suricata) qui cherchent un motif très classique de shellcode x86 :
+un CALL $+5 (octet E8 00 00 00 00) suivi d’un POP (58 ou 8F). C’est la technique GetPC (call-pop) utilisée pour récupérer l’adresse courante dans le shellcode.  ￼ ￼ ￼
+
+Concrètement : ça déclenche dès qu’un flux TCP contient cette séquence d’octets, même si c’est juste un binaire légitime en transit (maj jeux/VM/AV, dépôts Debian, etc.). Il y a donc pas mal de faux positifs documentés.  ￼ ￼ ￼
+
+À noter : l’équipe ET a désactivé récemment plusieurs de ces règles à cause du bruit (SIDs TCP : 2012086, 2012088, 2012090, 2012092 ; UDP : 2012087, 2012089, 2012091, 2012093). Vérifie ta version de ruleset et si ces SIDs sont encore actifs chez toi.  ￼
+
+Triage rapide (pragmatique)
+	1.	Identifie le SID exact, le 5-tuple et le sens du flux.
+	2.	Reconstitue le flux dans Gatewatcher (ou PCAP) et regarde le Content-Type : téléchargement HTTP(S) d’un EXE/MAJ/CDN connu ⇒ souvent FP.
+	3.	Cherche la séquence E8 00 00 00 00 58/8F dans le payload pour confirmer le match.  ￼
+	4.	Corrèle : d’autres alertes (ex. “PE EXE or DLL download”) + réputation du domaine/IP.
+	5.	Décision :
+	•	Si légitime : suppression ciblée (par SID + destination/source) ou désactivation globale des SIDs “No Offset …” s’ils sont trop bruyants.
+	•	Si doute/hostile (exploit vers un service interne, pièce jointe malveillante, etc.) : isole l’hôte, conserve PCAP, IOC-hunt.
+
+La doc Gatewatcher rappelle aussi qu’ils ont un moteur dédié de détection de shellcode (en plus des règles ET) — utile pour croiser les signaux.  ￼
+
+⸻
+
+« Un problème d’utiliser SMB2 ? »
+
+Court : non, SMB2/3 c’est le standard moderne. Le vrai problème, c’est SMBv1 (à bannir). Idéalement, vise SMB 3.1.1 avec signatures et chiffrement.  ￼ ￼
+
+Bonnes pratiques (résumé)
+	•	Désactiver SMBv1 partout (GPO/Features).  ￼ ￼
+	•	Privilégier SMB 3.1.1 : négocie AES-128-GCM pour la signature/chiffrement (mieux perf et sécurité).  ￼
+	•	Activer la signature SMB (au moins) et le chiffrement sur les partages sensibles.  ￼
+	•	Patch management : vuln. SMBGhost (CVE-2020-0796) touchait SMBv3 (compression) → systèmes à jour impératifs.  ￼ ￼
+	•	Segmentation/ACL : pas d’SMB hors LAN, filtrer 445/TCP, pas d’accès invité/anonymous, Kerberos/NTLMv2 only.
+
+⸻
+
+Si tu me donnes l’alerte exacte (SID, IP/ports, sens) ou un extrait PCAP, je te fais le triage pas-à-pas et, si c’est du bruit, je te propose la règle de suppression Gatewatcher/Suricata adaptée.
