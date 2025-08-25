@@ -1,3 +1,19 @@
+# Hash complet
+(Get-FileHash $exe1.FullName -Algorithm SHA256).Hash
+(Get-FileHash $exe2.FullName -Algorithm SHA256).Hash
+
+# Métadonnées (les tiennes indiquaient "Cryptogram Folder", "2.0.0.8", etc.)
+(Get-Item $exe1.FullName).VersionInfo | 
+  Format-List CompanyName,ProductName,FileDescription,FileVersion,OriginalFilename
+(Get-Item $exe2.FullName).VersionInfo | 
+  Format-List CompanyName,ProductName,FileDescription,FileVersion,OriginalFilename
+
+# Signature Authenticode (éditeur/certif), s’il y en a une (possible que non vu l’époque)
+Get-AuthenticodeSignature $exe1.FullName | 
+  Format-List Status,@{n='Subject';e={$_.SignerCertificate.Subject}},@{n='Thumbprint';e={$_.SignerCertificate.Thumbprint}}
+Get-AuthenticodeSignature $exe2.FullName | 
+  Format-List Status,@{n='Subject';e={$_.SignerCertificate.Subject}},@{n='Thumbprint';e={$_.SignerCertificate.Thumbprint}}
+
 # 4) Métadonnées version (pour vérifier même produit/nom/version)
 (Get-Item $e).VersionInfo | Format-List CompanyName,ProductName,FileDescription,FileVersion,OriginalFilename
 
