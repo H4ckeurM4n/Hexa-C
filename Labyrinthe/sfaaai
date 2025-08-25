@@ -1,0 +1,7 @@
+$file = "C:\Chemin\MonAppli.exe"
+Get-AuthenticodeSignature $file | Format-List Status,StatusMessage,
+  @{n='Publisher';e={$_.SignerCertificate.Subject}},
+  @{n='Thumbprint';e={$_.SignerCertificate.Thumbprint}},
+  @{n='ValidFrom';e={$_.SignerCertificate.NotBefore}},
+  @{n='ValidTo';e={$_.SignerCertificate.NotAfter}},
+  @{n='TimestampedBy';e={$_.TimeStamperCertificate.Subject}}
