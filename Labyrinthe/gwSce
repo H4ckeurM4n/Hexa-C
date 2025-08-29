@@ -1,0 +1,19 @@
+Introduction
+
+Dans le cadre de nos travaux de sécurisation et de surveillance du système d’information, nous avons mis en œuvre l’outil Gatewatcher afin d’évaluer ses capacités de détection et d’analyse des menaces. L’objectif était de vérifier sa pertinence dans un contexte opérationnel et de mesurer la valeur ajoutée qu’il peut apporter à nos équipes dans l’investigation d’incidents de sécurité.
+
+Pour ce faire, nous avons utilisé des fichiers PCAP (captures de trafic réseau), fournis à titre de simulation. Ces fichiers reproduisent différents scénarios d’attaque et permettent de tester l’efficacité de l’outil comme s’il s’agissait d’un environnement réel.
+
+Démarche
+	1.	Intégration des PCAP : les fichiers ont été implémentés dans Gatewatcher, nécessitant un compte administrateur pour leur prise en charge.
+	2.	Simulation d’attaques : une fois intégrés, les PCAP ont permis de rejouer différents scénarios d’intrusion et de comportements malveillants.
+	3.	Investigation et analyse : à partir des alertes générées, nous avons conduit des investigations afin d’évaluer la pertinence et la richesse des informations fournies par l’outil.
+
+Résultats préliminaires
+
+L’expérimentation a montré que Gatewatcher est capable de :
+	•	Faire ressortir rapidement des alertes pertinentes en lien avec les scénarios testés ;
+	•	Fournir un niveau de détail utile pour comprendre la nature des attaques ;
+	•	Aider les analystes dans leurs investigations en réduisant le temps nécessaire à l’identification des menaces.
+
+Ces résultats démontrent l’intérêt d’un tel outil pour renforcer notre capacité de détection et d’investigation au sein du système d’information.
