@@ -1,7 +1,0 @@
-Suite à l’alerte concernant la vulnérabilité zero-day sur SharePoint, j’ai procédé aux vérifications nécessaires.
-
-Après consultation des équipes ENT, Sylvain et RID, il a été confirmé que nous n’avons pas SharePoint déployé sur notre parc.
-
-Par mesure de précaution, j’ai également effectué les recherches demandées dans les journaux comme précisé dans le mail du CSIRT. Aucun élément suspect n’a été détecté.
-
-Sauf contre-indication de ta part, je peux répondre par la négative au CSIRT pour indiquer que nous ne sommes pas concernés.
