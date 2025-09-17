@@ -1,0 +1,119 @@
+
+1) Cadrer l’exposition (DNS)
+
+But : lister qui, quand, combien.
+KQL (adapte les noms d’index/champs selon ta pipeline ECS) :
+
+event.category:network and dns.question.name: "*javascriptbasics*"
+
+Champs utiles à afficher/agréger : @timestamp, host.name, source.ip, dns.question.name, dns.type, dns.response_code.
+
+👉 Étends la recherche aux TLD à risque et aux redirections vues dans les mêmes minutes :
+
+event.category:network and dns.question.name: /.*(update|browser|chrome|edge|firefox|cdn|script).*\.((top|xyz|monster|site|live|shop|click|cam|work|gdn|fun))/ 
+
+2) Retrouver le parcours web (HTTP/Proxy/Netflow)
+
+But : confirmer un téléchargement .js et voir les redirs.
+
+(event.category:network and url.domain: "javascriptbasics.com")
+or (event.category:web and url.full: "*javascriptbasics.com*")
+
+Ajoute : http.response.status_code, url.full, http.request.referrer, user_agent.original, destination.ip.
+Filtre sur les .js et sur des referers douteux :
+
+event.category:(web or network) and file.extension: "js"
+
+3) Sur l’endpoint : exécutions anormales (très discriminant)
+
+But : repérer le second stage typique (wscript/mshta/PowerShell) lancé depuis un navigateur.
+
+event.category:process and event.type:start and 
+process.parent.name: ("chrome.exe","msedge.exe","firefox.exe","iexplore.exe") and
+process.name: ("wscript.exe","cscript.exe","mshta.exe","powershell.exe","cmd.exe","rundll32.exe")
+
+Affiche process.command_line. Indices forts :
+	•	mshta.exe http* / javascript:
+	•	wscript.exe *.js ou cscript.exe *.js
+	•	powershell.exe avec -EncodedCommand, FromBase64String, iwr, Start-BitsTransfer, -ExecutionPolicy Bypass.
+
+Ces patterns sont classiques dans les chaînes fake update / SocGholish.  ￼
+
+4) Fichiers téléchargés & persistance
+
+But : voir où le JS a été écrit et s’il y a installation.
+
+event.category:file and event.type:(creation or modification) and 
+file.extension: ("js","vbs","ps1","dll","exe","zip","rar") and
+process.parent.name: ("chrome.exe","msedge.exe","firefox.exe")
+
+Persistance (logs Windows) :
+
+event.category:process and event.code:(4698 or 4702)  // tâches planifiées créées/modifiées
+or winlog.channel: "Microsoft-Windows-TaskScheduler/Operational"
+
+Regarde aussi registry.* (Run/RunOnce) et service (event.code:7045).
+
+5) Réseaux “post-infection”
+
+But : connexions chiffrées vers C2 depuis wscript/mshta/powershell/rundll32.
+
+event.category:network and process.name: ("wscript.exe","mshta.exe","powershell.exe","rundll32.exe") and destination.port: 443
+
+Croise avec destination.domain inconnu/nouveau dans ton environnement.
+
+6) Chasse rétrospective (30–90 jours)
+	•	Même set de requêtes, mais élargi aux domaines contenant “update/patch/browser/chrome/firefox/edge” + TLD “cheap/éphémères”.
+	•	Ajoute un bucket “first seen”/“rare domain” si tu as de la logique d’UEBA.
+
+⸻
+
+Tri rapide (15 minutes)
+	1.	DNS : combien d’hôtes → isole la/les machine(s) qui ont cliqué (HTTP vers .js).
+	2.	HTTP : un .js a-t-il été servi ? Statut 200/302/307, taille > 50–100 Ko ?
+	3.	Endpoint : navigateur → wscript/mshta/powershell ? Si oui = incident.
+	4.	Fichiers : présence de .js/.ps1 fraîchement créés dans Downloads, %TEMP%, %AppData%.
+	5.	Persistance : tâches planifiées/RunKeys/services récents.
+
+⸻
+
+Contention & remédiation (si indicateurs positifs)
+	•	Isole l’hôte via EDR, bloque domaine/IP (et domaines de redirection) sur DNS/Proxy/Firewall.
+	•	Supprime tâches planifiées, services et fichiers déposés ; réinitialise associations .js (désactiver WSH si possible).
+	•	Reset navigateurs (extensions, cache), vidange Startup & Run.
+	•	Change credentials si l’hôte a touché des backends sensibles (infostealers fréquents : BitRAT/Lumma, etc.).  ￼
+	•	Conserve artefacts pour forensique (Sysmon EID 1/3, Security 4688/4698, Prefetch/Amcache/SHIMCache).
+
+⸻
+
+Alerting durable (ELK)
+
+Crée une règle KQL “Browser → Script Interpreter” :
+
+event.category:process and event.type:start and
+process.parent.name: ("chrome.exe","msedge.exe","firefox.exe") and
+process.name: ("wscript.exe","cscript.exe","mshta.exe","powershell.exe","cmd.exe","rundll32.exe")
+
+Ajoute des conditions sur process.command_line (base64, -enc, FromBase64String, iwr, Start-BitsTransfer, javascript:) et exclue tes scripts internes signés si besoin.
+
+Règle Download .js depuis navigateur :
+
+event.category:file and file.extension:"js" and
+process.parent.name: ("chrome.exe","msedge.exe","firefox.exe")
+
+Règle Fake update (réseau) :
+
+event.category:(web or network) and 
+(url.path:("*update*") or url.query:("*update*")) and
+url.extension:("js","zip","rar","dll","exe")
+
+
+⸻
+
+Pourquoi je pense à SocGholish & co. ?
+	•	Thème “fausse MAJ navigateur” servi via JS injecté sur sites légitimes compromis.  ￼
+	•	Top menace observée encore en 2024, très active en 2025 avec variations/payloads variés.  ￼
+
+⸻
+
+Si tu veux, je te prépare des requêtes adaptées exactement à tes index (noms d’index Beats/Filebeat/Elastic-Agent, champs réels que tu as en 7.x) et un mini-dashboard “Fake Update Triage” (DNS→HTTP→Process) pour faire la timeline en 2 clics.
