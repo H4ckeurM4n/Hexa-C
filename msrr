@@ -1,0 +1,98 @@
+Super idée de faire un dashboard dédié à MSRA (Microsoft Remote Assistance) : c’est un super indicateur d’assistance légitime… et de mouvements latéraux discrets. Voilà un set de visu “prêt-à-poser” dans Kibana (ECS/Winlogbeat/Sysmon). J’inclus à chaque fois l’intention + des pistes KQL.
+
+1) KPIs (tuiles métriques)
+	•	Sessions MSRA (24h / 7j)
+process.name:"msra.exe" and event.action:("Process Create" or "start")
+	•	Helpers uniques (comptes qui initient)
+process.name:"msra.exe" | top user.name
+	•	Hôtes assistés uniques
+destination.address:* or host.name:* | filter sur événements RA
+	•	Échecs vs succès (voir EventIDs ci-dessous)
+Pie avec winlog.event_id in (1149,4624,4634,21,24,30,41) par “succès/échec”.
+
+Réfs utiles pour les logs RDP/Terminal Services (1149 = auth côté RDP) :  ￼
+Canal Remote Assistance opérationnel existe et loggue p.ex. EventID 30 (“RA ended”) :  ￼
+
+2) Timeline d’usage
+	•	Séries temporelles des exécutions msra.exe par host.name.
+event.dataset:(windows* or sysmon*) and process.name:"msra.exe"
+
+3) Qui aide qui ?
+	•	Data table “Helper → Cible” avec compte/ordinateur source & cible.
+Colonnes : user.name (helper), source.ip, host.name (machine helper), destination.ip|address|host.name (machine assistée).
+Combine Sysmon (netcon) + RDP 1149 si dispo.
+
+4) Modes d’exécution MSRA
+	•	Bar chart par arguments (détection /offerRA, /saveasfile, /email).
+process.name:"msra.exe" | top process.command_line
+Exemples d’options : /offerRA, /saveasfile, /email.  ￼
+
+5) Sessions RDP liées (corro)
+	•	Histogramme des 1149 + LogonType 10 (RDP) pour confirmer.
+winlog.channel:"Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" and winlog.event_id:1149
+	•	winlog.channel:"Security" and winlog.event_id:4624 and winlog.event_data.LogonType:10
+(Affiche en overlays).  ￼
+
+6) Début/fin de session RA
+	•	Durée de session (TS-LocalSessionManager 21=logon, 24=disconnect ; RA Op 30=end).
+Table calculée (bucket par user.name,host.name) pour estimer la durée.  ￼
+
+7) Parents/Enfants suspects
+	•	Sunburst / table des parents de msra.exe (attendu: explorer.exe).
+process.name:"msra.exe" | top process.parent.name
+	•	Enfants de msra.exe (anormal : powershell.exe, cmd.exe).
+process.parent.name:"msra.exe" and process.name:("powershell.exe","cmd.exe")
+(Très bon signal de compromission).  ￼
+
+8) Fichiers d’invitation
+	•	Compteur + table des .msrcincident (création & chemins).
+event.code:11 and event.provider:"Sysmon" and file.extension:"msrcincident" (Sysmon EID 11 FileCreate).  ￼
+
+9) Carte réseau (interne/externe)
+	•	Layer “Connections MSRA/RDP” (si NetFlow/Sysmon EID 3) par destination.ip (GeoIP).
+Filtre heures non ouvrées pour chasse.
+
+10) Conformité GPO / Registre (offre RA)
+	•	État poste : RA sollicitée / non sollicitée activée ?
+Ingestion périodique de clés :
+HKLM\System\CurrentControlSet\Control\Remote Assistance\fAllowToGetHelp
+HKLM\Software\Policies\Microsoft\Windows NT\Terminal Services\fAllowUnsolicited
+…\fAllowUnsolicitedFullControl
+Tableau “compliant/non-compliant”.  ￼
+
+11) Panneau “Règles & alertes” (à afficher en haut)
+	•	MSRA lancé hors horaires (p.ex. 19h-7h ; week-end).
+	•	MSRA sur serveurs (tag role:server).
+	•	Helper non Helpdesk (user.name not in AD group “RA_Helpers”).
+	•	msra.exe → powershell/cmd (cf. #7).
+	•	.msrcincident créé hors répertoire attendu (exfil).
+	•	1149 sans 4624:10 corrélé (inhabituel selon votre environnement).  ￼
+
+12) Panneau “Dépendances & santé”
+	•	Exceptions pare-feu RA et GPO appliquées (afficher % d’hôtes OK).
+Rappel : activer la règle “Remote Assistance” + TCP 135 et autoriser msra.exe / raserver.exe quand vous utilisez Offer RA.  ￼
+
+⸻
+
+Collecte minimale recommandée
+	•	Security: 4624/4634 (Logon/Logoff), LogonType=10.  ￼
+	•	TerminalServices-RemoteConnectionManager/Operational: 1149.  ￼
+	•	TerminalServices-LocalSessionManager/Operational: 21/24 (session open/close).  ￼
+	•	Microsoft-Windows-RemoteAssistance/Operational: fin/erreurs (p.ex. 30, 41).  ￼
+	•	Sysmon: EID 1 (Process Create), 3 (Network), 11 (FileCreate).  ￼
+
+⸻
+
+Bonus KQL prêts à coller
+	•	Tout MSRA (créations de processus)
+event.category:process and process.name:"msra.exe"
+	•	Offer RA
+process.command_line:*"/offerRA"*
+	•	Invitations créées
+event.action:"File created" and file.extension:"msrcincident"
+	•	MSRA → PowerShell/CMD
+process.parent.name:"msra.exe" and process.name:("powershell.exe","cmd.exe")
+	•	RDP corrélé
+(winlog.channel:"Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" and winlog.event_id:1149) or (winlog.event_id:4624 and winlog.event_data.LogonType:10)
+
+Si tu veux, je peux te générer un modèle de dashboard Kibana (NDJSON) avec ces visualisations et des filtres (heures ouvrées, machines sensibles, comptes Helpdesk).
