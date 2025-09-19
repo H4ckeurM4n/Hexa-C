@@ -1,3 +1,5 @@
+À noter : certaines requêtes observées peuvent résulter du chargement automatique de contenus tiers (publicités/trackers/CDN) intégrés à des sites légitimes. Dans ce contexte, le poste peut effectuer des résolutions DNS et appels HTTP sans action utilisateur, ce qui explique en partie la présence de domaines externes dans les journaux. À ce stade, nous n’avons pas d’élément indiquant une navigation top-level vers un site compromis ni de téléchargement associé. Nous restons preneurs d’éléments complémentaires 
+
 Bonjour,
 
 Nous confirmons la présence de requêtes DNS vers le domaine signalé (ex. javascriptbasics[.]com) dans notre SIEM sur la fenêtre [date/heure début – date/heure fin, Europe/Paris], émanant de [nb] poste(s) : [hostnames/IPs].
