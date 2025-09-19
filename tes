@@ -1,3 +1,24 @@
+Bonjour,
+
+Nous confirmons la présence de requêtes DNS vers le domaine signalé (ex. javascriptbasics[.]com) dans notre SIEM sur la fenêtre [date/heure début – date/heure fin, Europe/Paris], émanant de [nb] poste(s) : [hostnames/IPs].
+
+À l’issue de nos vérifications côté postes et journaux locaux, aucun élément ne permet de conclure à une compromission :
+	•	Navigation / Historique : aucune trace de visite d’un site compromis menant au domaine signalé (revue historique Firefox/Referrer, téléchargements récents).
+	•	Téléchargements : aucun fichier .js/.zip/.exe téléchargé lié à l’incident (contrôle du dossier Downloads, marque d’origine/MOTW, hash).
+	•	Exécution / Persistance : aucune exécution suspecte (wscript/mshta/PowerShell) ni création de tâche planifiée, service ou clé Run corrélée à l’alerte.
+	•	Retour utilisateurs : pas de fenêtre “mise à jour du navigateur” observée, aucun téléchargement déclaré.
+	•	EDR/Defender : pas de détection associée sur les hôtes concernés.
+
+Actions réalisées :
+	•	Blocage préventif du domaine signalé (et surveillance des éventuels domaines de redirection) sur nos contrôles réseau/DNS.
+	•	Mise en place d’une surveillance renforcée  [durée, ex. 14 jours] et d’alertes spécifiques (navigateur → interprète de scripts, téléchargements .js).
+
+Demande complémentaire :
+Afin d’affiner la corrélation, pouvez-vous partager d’éventuels IOCs additionnels (domaines/URL de redirection, chemins/URI, adresses IP, user-agents, horodatages exacts, hash d’échantillons, PCAP le cas échéant) liés à ce ticket ?
+
+À ce stade, nous classons l’événement comme incident non confirmé (risque actuel : faible), sous réserve d’éléments supplémentaires de votre part.
+
+
 Dans le cadre du suivi de la sécurité des systèmes d’information, nous avons identifié que vous utilisez un gestionnaire de mots de passe en ligne.
 Afin d’assurer la conformité aux règles internes et de mieux comprendre cet usage, nous souhaiterions obtenir quelques précisions de votre part :
 	•	Cet usage est-il lié à vos activités professionnelles (accès aux outils, applications métiers, etc.) ?
